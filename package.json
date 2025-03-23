@@ -12,6 +12,11 @@
     "import": "./dist/index.js",
     "require": "./dist/index.cjs"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FluentCoding/UltraPatch.git"
+  },
+  "license": "MIT",
   "keywords": [
     "jsonpatch",
     "json",
