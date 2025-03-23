@@ -348,19 +348,15 @@ export function patch(
           break;
         }
         case "test":
-          if (
-            !UltraPatchUtil.isEqual(
-              UltraPatchUtil.accessPath(
-                result as UltraPatchTypes.DiffableCollection,
-                operation.path
-              ),
-              operation.value
-            )
-          )
+          const actualValue = UltraPatchUtil.accessPath(
+            result as UltraPatchTypes.DiffableCollection,
+            operation.path
+          );
+          if (!UltraPatchUtil.isEqual(actualValue, operation.value))
             throw new JSONPatchTypes.JSONPatchTestError(
               operation.path,
               operation.value,
-              result
+              actualValue
             );
           break;
       }
