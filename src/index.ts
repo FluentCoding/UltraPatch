@@ -2,7 +2,6 @@ import { JSONPatchTypes } from "./util/jsonpatch";
 import type { UltraPatchTypes } from "./util/types";
 import { UltraPatchUtil } from "./util/util";
 
-export * from "./util/jsonpatch";
 export * from "./util/types";
 
 // reference https://jsonpatch.com/
@@ -18,7 +17,7 @@ export * from "./util/types";
  */
 export function diff(
   origin: UltraPatchTypes.Diffable,
-  destination: UltraPatchTypes.Diffable,
+  destination: UltraPatchTypes.Diffable
 ): JSONPatchTypes.Operation[] {
   if (origin === destination) return [];
 
@@ -163,7 +162,7 @@ export function diff(
  */
 export function patch(
   target: UltraPatchTypes.Diffable,
-  operations: JSONPatchTypes.Operation[],
+  operations: JSONPatchTypes.Operation[]
 ): UltraPatchTypes.Diffable {
   let result: UltraPatchTypes.Diffable = target;
   for (const operation of operations) {
@@ -180,7 +179,7 @@ export function patch(
         case "copy":
           result = UltraPatchUtil.accessPath(
             result as UltraPatchTypes.DiffableCollection,
-            operation.from,
+            operation.from
           );
           break;
         case "test":
@@ -188,7 +187,7 @@ export function patch(
             throw new JSONPatchTypes.JSONPatchTestError(
               "",
               operation.value,
-              result,
+              result
             );
           break;
       }
@@ -197,7 +196,7 @@ export function patch(
         case "add": {
           let parent = result as UltraPatchTypes.DiffableCollection;
           const pathSegments = UltraPatchUtil.unescapedPathSegments(
-            operation.path,
+            operation.path
           );
           const last = pathSegments.length - 1;
 
@@ -224,7 +223,7 @@ export function patch(
         case "replace": {
           let parent = result as UltraPatchTypes.DiffableCollection;
           const pathSegments = UltraPatchUtil.unescapedPathSegments(
-            operation.path,
+            operation.path
           );
           const last = pathSegments.length - 1;
 
@@ -242,7 +241,7 @@ export function patch(
         case "remove": {
           let parent = result as UltraPatchTypes.DiffableCollection;
           const pathSegments = UltraPatchUtil.unescapedPathSegments(
-            operation.path,
+            operation.path
           );
           const last = pathSegments.length - 1;
 
@@ -267,7 +266,7 @@ export function patch(
           {
             let parent = result as UltraPatchTypes.DiffableCollection;
             const pathSegments = UltraPatchUtil.unescapedPathSegments(
-              operation.from,
+              operation.from
             );
             const last = pathSegments.length - 1;
 
@@ -289,7 +288,7 @@ export function patch(
           {
             let parent = result as UltraPatchTypes.DiffableCollection;
             const pathSegments = UltraPatchUtil.unescapedPathSegments(
-              operation.path,
+              operation.path
             );
             const last = pathSegments.length - 1;
 
@@ -312,7 +311,7 @@ export function patch(
           {
             let parent = result as UltraPatchTypes.DiffableCollection;
             const pathSegments = UltraPatchUtil.unescapedPathSegments(
-              operation.from,
+              operation.from
             );
             const last = pathSegments.length - 1;
 
@@ -329,7 +328,7 @@ export function patch(
           {
             let parent = result as UltraPatchTypes.DiffableCollection;
             const pathSegments = UltraPatchUtil.unescapedPathSegments(
-              operation.path,
+              operation.path
             );
             const last = pathSegments.length - 1;
 
@@ -353,15 +352,15 @@ export function patch(
             !UltraPatchUtil.isEqual(
               UltraPatchUtil.accessPath(
                 result as UltraPatchTypes.DiffableCollection,
-                operation.path,
+                operation.path
               ),
-              operation.value,
+              operation.value
             )
           )
             throw new JSONPatchTypes.JSONPatchTestError(
               operation.path,
               operation.value,
-              result,
+              result
             );
           break;
       }
