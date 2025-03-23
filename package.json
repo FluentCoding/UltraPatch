@@ -12,6 +12,12 @@
     "import": "./dist/index.js",
     "require": "./dist/index.cjs"
   },
+  "keywords": [
+    "jsonpatch",
+    "json",
+    "diff",
+    "patch"
+  ],
   "scripts": {
     "prepareTest": "bun run test/tests-gen.js",
     "build": "bun run build.ts",
