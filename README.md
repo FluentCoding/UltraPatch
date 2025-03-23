@@ -1,9 +1,23 @@
-# UltraPatch
+<h1 align="center">
+  <picture>
+      <source height="80" media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/d911d140-2cbd-4965-b529-69ce481c2f56">
+      <img height="80" src="https://github.com/user-attachments/assets/d911d140-2cbd-4965-b529-69ce481c2f56">
+  </picture>
+
+  ![npm version](https://img.shields.io/npm/v/ultrapatch)
+  ![license](https://img.shields.io/npm/l/ultrapatch)
+</h1>
 
 - 100% coverage of [JSON Patch Tests](https://github.com/json-patch/json-patch-tests/blob/master/tests.json) (excluding faulty ones, see below)
 - Runs in all modern JavaScript runtimes like Bun, Node.JS, Deno but also Browsers
 - TypeScript & CommonJS support, zero dependencies and extremely lightweight
 ---
+
+- [Usage](#usage)
+- [Performance](#performance)
+- [Testing & Contributing](#testing--contributing)
+
+<br>
 
 A very fast JSONPatch library that is capable of generating diffs and patching existing objects with compatible diffs. The implementation is naive, meaning that it does not handle edge cases like...
 - circular references
@@ -18,10 +32,10 @@ If you want to diff/patch internally or, in a network environment, synchronize s
 
 Install this library with the package manager of your choice:
 
-```
-bun add ultrapatch
-npm i ultrapatch
-deno add npm:ultrapatch
+```sh
+bun add ultrapatch      # Bun
+npm i ultrapatch        # Node
+deno add npm:ultrapatch # Deno
 ```
 
 ... then simply use the two provided methods like this:
@@ -29,13 +43,16 @@ deno add npm:ultrapatch
 ```ts
 import * as UltraPatch from "ultrapatch";
 
+const original = { a: 1, b: [1, 2] };
+const modified = { a: 2, b: [1, 2, 3] };
+
 // returns the list of changes in JSONPatch format
-const diff = UltraPatch.diff({ a: 1, b: [1, 2] }, { a: 2, b: [1, 2, 3] });
+const diff = UltraPatch.diff(original, modified);
 
 // modifies the first argument in-place to apply the changes in the second argument and returns the result (reference to first argument or entirely new object in case you modify at root-level)
-const desired = UltraPatch.patch({ a: 1, b: [1, 2] }, diff);
+const desired = UltraPatch.patch(original, diff);
 
-// desired === { a: 2, b: [1, 2, 3] }
+// desired === { a: 2, b: [1, 2, 3] } === modified
 ```
 
 ## Performance
