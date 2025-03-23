@@ -1,0 +1,26 @@
+{
+  "name": "bench",
+  "type": "module",
+  "devDependencies": {
+    "@types/fast-json-patch": "^1.1.7",
+    "@types/jiff": "^0.7.7"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "private": true,
+  "scripts": {
+    "node:diff": "node --experimental-strip-types diff.ts",
+    "bun:diff": "bun run diff.ts",
+    "node:patch": "node --experimental-strip-types patch.ts",
+    "bun:patch": "bun run patch.ts"
+  },
+  "dependencies": {
+    "fast-json-patch": "^3.1.1",
+    "jiff": "^0.7.3",
+    "json-diff-ts": "^4.2.0",
+    "json-joy": "^17.32.1",
+    "microdiff": "^1.5.0",
+    "rfc6902": "^5.1.2"
+  }
+}

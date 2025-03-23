@@ -1,0 +1,35 @@
+{
+  "name": "ultrapatch",
+  "author": "FluentCoding",
+  "type": "module",
+  "version": "0.1.0",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "description": "🔥 Extremely fast (but naive) JSONPatch implementation",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "scripts": {
+    "prepareTest": "bun run test/tests-gen.js",
+    "build": "bun run build.ts",
+    "prepublishOnly": "bun run build",
+    "node:bench:diff": "node --experimental-strip-types bench/diff.ts",
+    "bun:bench:diff": "bun run bench/diff.ts",
+    "node:bench:patch": "node --experimental-strip-types bench/patch.ts",
+    "bun:bench:patch": "bun run bench/patch.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "bun-plugin-dts": "^0.3.0",
+    "mitata": "^1.0.34"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "resolutions": {
+    "bun-types": "canary"
+  }
+}
