@@ -1,4 +1,5 @@
-import type { JSONPatchTypes, UltraPatchTypes } from "../dist";
+import type { UltraPatchTypes } from "../src";
+import type { JSONPatchTypes } from "../src/util/jsonpatch";
 import * as UltraPatch from "../dist";
 
 function repeatObject<T>(amount: number, obj: T): T[] {
@@ -18,7 +19,7 @@ function createBundle<ID extends string, T extends UltraPatchTypes.Diffable>(
   id: ID,
   name: string,
   origin: T,
-  change: UltraPatchTypes.Diffable | ((v: T) => UltraPatchTypes.Diffable),
+  change: UltraPatchTypes.Diffable | ((v: T) => UltraPatchTypes.Diffable)
 ): OriginDiffDestBundle<ID> {
   const destination =
     typeof change === "function" ? change(structuredClone(origin)) : change;
@@ -56,7 +57,7 @@ export const dataSets = [
       h: { deep: { x: "old" }, newKey: "newData" },
       i: [{ id: 1 }, { id: 2 }, { id: 3 }],
       j: "addedKey",
-    },
+    }
   ),
   createBundle(
     "randomgame",
@@ -72,7 +73,7 @@ export const dataSets = [
         x: 1 + Math.floor(Math.random() * 100),
         y: 1 + Math.floor(Math.random() * 100),
       }));
-    },
+    }
   ),
   // copied from https://github.com/nestjs/nest/blob/master/package.json
   createBundle(
@@ -338,7 +339,7 @@ export const dataSets = [
         entry.dependencies["youtube"] = "https://youtube.com";
         return entry;
       });
-    },
+    }
   ),
 ] satisfies OriginDiffDestBundle<string>[];
 
@@ -346,6 +347,6 @@ console.table(
   dataSets.map((dataSet) => ({
     "Test Name": dataSet.name,
     "Changes size": dataSet.diff.length,
-  })),
+  }))
 );
 console.info("Dataset loaded, starting benchmark...\n");

@@ -1,6 +1,5 @@
-import { run, bench, summary, boxplot, B, measure } from "mitata";
+import { run, bench, summary, boxplot } from "mitata";
 import * as UltraPatch from "../dist/index.js";
-import microdiff from "microdiff";
 import jiff from "jiff";
 import jsonpatch from "fast-json-patch";
 import { applyPatch } from "json-joy/lib/json-patch";
@@ -52,7 +51,7 @@ for (const bundle of dataSets) {
               (patch.op === "add" || patch.op === "replace") &&
               patch.value === undefined
                 ? { ...patch, value: null }
-                : patch
+                : patch,
             );
           },
           bench(origin: any, patch: any) {
