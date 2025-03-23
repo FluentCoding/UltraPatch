@@ -2,7 +2,7 @@
   "name": "ultrapatch",
   "author": "FluentCoding",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,6 +12,9 @@
     "import": "./dist/index.js",
     "require": "./dist/index.cjs"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FluentCoding/UltraPatch.git"
