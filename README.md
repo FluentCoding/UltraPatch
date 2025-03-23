@@ -171,7 +171,6 @@ summary
 
 ---
 
-<br>
 Overall, ultrapatch performs the best when performing diffs on not so big samples, however in the `randomgame` and `bignested` cases, it gets slightly outperformed by `fast-json-patch`/`jiff` whilst still keeping memory usage low.
 
 ### Patch Benchmarks
@@ -252,7 +251,6 @@ summary
 
 ---
 
-<br>
 When it comes to patching, ultrapatch has the upper hand in every test.
 
 ## Testing & Contributing
