@@ -3,12 +3,10 @@ export namespace UltraPatchTypes {
 
   export type Diffable =
     | Primitive
-    | Array<Primitive | Diffable>
+    | Diffable[]
     | {
-        [index: string]: Primitive | Diffable;
+        [index: string]: Diffable;
       };
 
-  export type DiffableCollection =
-    | Record<string, UltraPatchTypes.Diffable>
-    | UltraPatchTypes.Diffable[];
+  export type DiffableCollection = Record<string, Diffable> | Diffable[];
 }

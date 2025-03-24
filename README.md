@@ -74,7 +74,7 @@ For the patching, we patch the original with the provided diff of the sample (th
 | -------------------------------------------------------------------------------- | ---------------------- |
 | Simple                                                                           | 3                      |
 | Complicated                                                                      | 14                     |
-| Random 2000 players game, x/y positions moving (big flat array)                  | 2000                   |
+| Random 1000 players game, x/y positions moving (big flat array)                  | 2000                   |
 | 10x NestJS package.json, removing scripts and adding 2 fake dependencies to each | 30                     |
 
 Tested on:
