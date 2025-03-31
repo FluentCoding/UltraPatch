@@ -132,7 +132,7 @@ export function diff(
         if (!UltraPatchUtil.hasOwnProperty(origin, key)) {
           operations.push({
             op: "add",
-            path: parentPath + "/" + key,
+            path: parentPath + "/" + UltraPatchUtil.escapePathComponent(key),
             value: (destination as any)[key],
           });
         }
