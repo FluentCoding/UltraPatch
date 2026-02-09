@@ -2,7 +2,7 @@
   "name": "ultrapatch",
   "author": "FluentCoding",
   "type": "module",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -30,7 +30,7 @@
     "prepareTest": "bun run test/tests-gen.js",
     "build": "bun run build.ts",
     "prepublishOnly": "bun run build",
-    "node:bench:diff": "node --experimental-strip-types bench/diff.ts",
+    "node:bench:diff": "node bench/diff.ts",
     "bun:bench:diff": "bun run bench/diff.ts",
     "node:bench:patch": "node --experimental-strip-types bench/patch.ts",
     "bun:bench:patch": "bun run bench/patch.ts"

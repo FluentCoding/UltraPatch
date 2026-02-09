@@ -70,6 +70,8 @@ Each `OriginDiffDestBundle` represents the original object, the diff from origin
 To benchmark the diffing, we diff the original from the modified object of each sample.<br>
 For the patching, we patch the original with the provided diff of the sample (that has been precomputed).
 
+_Disclaimer: I have removed the jiff library from the diff benchmarks due to wrong results that artificially resulted in fast times because jiff simply didn't diff at all and rather outputted "add" operations for the entire destination object._
+
 | Test name                                                                        | Diff operations length |
 | -------------------------------------------------------------------------------- | ---------------------- |
 | Simple                                                                           | 3                      |
@@ -80,51 +82,47 @@ For the patching, we patch the original with the provided diff of the sample (th
 Tested on:
 
 ```yml
-clk: ~2.15 GHz
+clk: ~2.97 GHz
 cpu: AMD Ryzen 5 5600X 6-Core Processor
-runtime: bun 1.2.6 (x64-win32)
+runtime: bun 1.3.10 (x64-win32)
 ```
 
 ### Diff Benchmarks
 
 | Simple          | Avg. time per iter. | Avg. memory usage per iter. |
 | --------------- | ------------------- | --------------------------- |
-| ultrapatch      | 75.72 ns/iter       | 8.07 b                      |
-| fast-json-patch | 256.55 ns/iter      | 22.00 b                     |
-| jiff            | 909.61 ns/iter      | 186.51 b                    |
-| microdiff       | 639.39 ns/iter      | 61.95 b                     |
-| jsondiffts      | 2.33 µs/iter        | 352.30 b                    |
-| rfc6902         | 7.29 µs/iter        | 768.44 b                    |
+| ultrapatch      | 71.36 ns/iter       | 4.80 b                      |
+| fast-json-patch | 330.08 ns/iter      | 1.47 b                      |
+| microdiff       | 544.58 ns/iter      | 1.19 b                      |
+| jsondiffts      | 2.28 µs/iter        | 68.14 b                     |
+| rfc6902         | 10.77 µs/iter       | 40.21 b                     |
 
 ```
 summary
   ultrapatch
-   3.39x faster than fast-json-patch
-   8.44x faster than microdiff
-   12.01x faster than jiff
-   30.72x faster than jsondiffts
-   96.29x faster than rfc6902
+   4.63x faster than fast-json-patch
+   7.63x faster than microdiff
+   31.93x faster than jsondiffts
+   150.92x faster than rfc6902
 ```
 
 ---
 
 | Complicated     | Avg. time per iter. | Avg. memory usage per iter. |
 | --------------- | ------------------- | --------------------------- |
-| ultrapatch      | 685.40 ns/iter      | 73.54 b                     |
-| fast-json-patch | 1.75 µs/iter        | 153.60 b                    |
-| jiff            | 2.90 µs/iter        | 277.83 b                    |
-| microdiff       | 5.51 µs/iter        | 544.71 b                    |
-| jsondiffts      | 17.06 µs/iter       | 1.38 kb                     |
-| rfc6902         | 23.53 µs/iter       | 877.58 b                    |
+| ultrapatch      | 664.93 ns/iter      | 7.22 b                      |
+| fast-json-patch | 1.91 µs/iter        | 17.70 b                     |
+| microdiff       | 4.80 µs/iter        | 44.11 b                     |
+| jsondiffts      | 17.23 µs/iter       | 593.20 kb                   |
+| rfc6902         | 28.04 µs/iter       | 119.03 b                    |
 
 ```
 summary
   ultrapatch
-   2.56x faster than fast-json-patch
-   4.23x faster than jiff
-   8.04x faster than microdiff
-   24.89x faster than jsondiffts
-   34.33x faster than rfc6902
+   2.87x faster than fast-json-patch
+   7.22x faster than microdiff
+   25.91x faster than jsondiffts
+   42.16x faster than rfc6902
 ```
 
 ---
@@ -133,125 +131,121 @@ _Disclaimer: rfc6902 crashed in the following test so its excluded_
 
 | randomgame      | Avg. time per iter. | Avg. memory usage per iter. |
 | --------------- | ------------------- | --------------------------- |
-| ultrapatch      | 419.57 µs/iter      | 16.74 kb                    |
-| fast-json-patch | 327.15 µs/iter      | 38.26 kb                    |
-| jiff            | 43.96 ms/iter       | 17.17 mb                    |
-| microdiff       | 672.27 µs/iter      | 12.03 kb                    |
-| jsondiffts      | 4.37 ms/iter        | 480.80 kb                   |
+| ultrapatch      | 140.82 µs/iter      | 12.19 kb                    |
+| fast-json-patch | 232.78 µs/iter      | 3.93 kb                     |
+| microdiff       | 618.15 µs/iter      | 37.75 kb                    |
+| jsondiffts      | 3.77 ms/iter        | 92.86 kb                    |
 
 ```
 summary
-  fast-json-patch
-   1.28x faster than ultrapatch
-   2.05x faster than microdiff
-   13.36x faster than jsondiffts
-   134.39x faster than jiff
+  ultrapatch
+   1.65x faster than fast-json-patch
+   4.39x faster than microdiff
+   26.76x faster than jsondiffts
 ```
 
 ---
 
 | bignested       | Avg. time per iter. | Avg. memory usage per iter. |
 | --------------- | ------------------- | --------------------------- |
-| ultrapatch      | 123.36 µs/iter      | 2.06 kb                     |
-| fast-json-patch | 132.89 µs/iter      | 6.51 kb                     |
-| jiff            | 91.71 µs/iter       | 5.96 kb                     |
-| microdiff       | 262.24 µs/iter      | 8.66 kb                     |
-| jsondiffts      | 1.46 ms/iter        | 56.21 kb                    |
-| rfc6902         | 14.10 ms/iter       | 442.24 kb                   |
+| ultrapatch      | 142.85 µs/iter      | 8.87 kb                     |
+| fast-json-patch | 155.90 µs/iter      | 5.76 kb                     |
+| microdiff       | 292.43 µs/iter      | 19.31 kb                    |
+| jsondiffts      | 1.58 ms/iter        | 124.73 kb                   |
+| rfc6902         | 16.19 ms/iter       | 514.50 kb                   |
 
 ```
 summary
-  jiff
-   1.35x faster than ultrapatch
-   1.45x faster than fast-json-patch
-   2.86x faster than microdiff
-   15.96x faster than jsondiffts
-   153.77x faster than rfc6902
+  ultrapatch
+   1.09x faster than fast-json-patch
+   2.05x faster than microdiff
+   11.07x faster than jsondiffts
+   113.32x faster than rfc6902
 ```
 
 ---
 
-Overall, ultrapatch performs the best when performing diffs on not so big samples, however in the `randomgame` and `bignested` cases, it gets slightly outperformed by `fast-json-patch`/`jiff` whilst still keeping memory usage low.
+In all given benchmarks, UltraPatch outperforms the other major JSONPatch libraries whilst keeping memory usage at a stable low.
 
 ### Patch Benchmarks
 
 | Simple          | Avg. time per iter. | Avg. memory usage per iter. |
 | --------------- | ------------------- | --------------------------- |
-| ultrapatch      | 276.79 ns/iter      | 22.45 b                     |
-| fast-json-patch | 457.46 ns/iter      | 38.42 b                     |
-| json-joy        | 369.45 ns/iter      | 32.63 b                     |
-| jiff            | 351.31 ns/iter      | 33.01 b                     |
-| rfc6902         | 886.56 ns/iter      | 74.86 b                     |
+| ultrapatch      | 263.14 ns/iter      | 13.73 b                     |
+| fast-json-patch | 453.39 ns/iter      | 9.01 b                      |
+| json-joy        | 447.76 ns/iter      | 10.26 b                     |
+| jiff            | 374.94 ns/iter      | 16.28 b                     |
+| rfc6902         | 983.02 ns/iter      | 4.78 b                      |
 
 ```summary
 summary
   ultrapatch
-   1.27x faster than jiff
-   1.33x faster than json-joy
-   1.65x faster than fast-json-patch
-   3.2x faster than rfc6902
+   1.42x faster than jiff
+   1.7x faster than json-joy
+   1.72x faster than fast-json-patch
+   3.74x faster than rfc6902
 ```
 
 ---
 
 | Complicated     | Avg. time per iter. | Avg. memory usage per iter. |
 | --------------- | ------------------- | --------------------------- |
-| ultrapatch      | 1.35 µs/iter        | 127.87 b                    |
-| fast-json-patch | 2.10 µs/iter        | 253.99 b                    |
-| json-joy        | 3.57 µs/iter        | 632.19 b                    |
-| jiff            | 4.38 µs/iter        | 753.72 b                    |
-| rfc6902         | 5.18 µs/iter        | 711.45 b                    |
+| ultrapatch      | 1.34 µs/iter        | 87.29 b                     |
+| fast-json-patch | 2.07 µs/iter        | 71.29 b                     |
+| json-joy        | 2.72 µs/iter        | 197.80 b                    |
+| jiff            | 4.00 µs/iter        | 242.37 b                    |
+| rfc6902         | 5.76 µs/iter        | 241.38 b                    |
 
 ```
 summary
   ultrapatch
-   1.56x faster than fast-json-patch
-   2.65x faster than json-joy
-   3.25x faster than jiff
-   3.84x faster than rfc6902
+   1.54x faster than fast-json-patch
+   2.02x faster than json-joy
+   2.98x faster than jiff
+   4.29x faster than rfc6902
 ```
 
 ---
 
 | randomgame      | Avg. time per iter. | Avg. memory usage per iter. |
 | --------------- | ------------------- | --------------------------- |
-| ultrapatch      | 261.68 µs/iter      | 2.86 kb                     |
-| fast-json-patch | 428.92 µs/iter      | 23.72 kb                    |
-| json-joy        | 754.31 µs/iter      | 12.15 kb                    |
-| jiff            | 679.41 µs/iter      | 46.99 kb                    |
-| rfc6902         | 705.67 µs/iter      | 25.53 kb                    |
+| ultrapatch      | 298.52 µs/iter      | 707.97 b                    |
+| fast-json-patch | 421.25 µs/iter      | 28.50 kb                    |
+| json-joy        | 492.67 µs/iter      | 26.44 kb                    |
+| jiff            | 610.00 µs/iter      | 2.06 kb                     |
+| rfc6902         | 916.78 µs/iter      | 51.64 kb                    |
 
 ```summary
 summary
   ultrapatch
-   1.64x faster than fast-json-patch
-   2.6x faster than jiff
-   2.7x faster than rfc6902
-   2.88x faster than json-joy
+   1.41x faster than fast-json-patch
+   1.65x faster than json-joy
+   2.04x faster than jiff
+   3.07x faster than rfc6902
 ```
 
 ---
 
 | bignested       | Avg. time per iter. | Avg. memory usage per iter. |
 | --------------- | ------------------- | --------------------------- |
-| ultrapatch      | 5.16 µs/iter        | 328.15 b                    |
-| fast-json-patch | 8.11 µs/iter        | 708.10 b                    |
-| json-joy        | 14.51 µs/iter       | 2.48 kb                     |
-| jiff            | 102.06 µs/iter      | 5.61 kb                     |
-| rfc6902         | 18.08 µs/iter       | 2.32 kb                     |
+| ultrapatch      | 5.91 µs/iter        | 300.70 b                    |
+| fast-json-patch | 7.54 µs/iter        | 744.19 b                    |
+| json-joy        | 9.84 µs/iter        | 1.61 kb                     |
+| jiff            | 109.28 µs/iter      | 2.09 kb                     |
+| rfc6902         | 17.43 µs/iter       | 2.24 kb                     |
 
 ```
 summary
   ultrapatch
-   1.57x faster than fast-json-patch
-   2.81x faster than json-joy
-   3.5x faster than rfc6902
-   19.78x faster than jiff
+   1.28x faster than fast-json-patch
+   1.67x faster than json-joy
+   2.95x faster than rfc6902
+   18.5x faster than jiff
 ```
 
 ---
 
-When it comes to patching, ultrapatch has the upper hand in every test.
+UltraPatch also has the upper hand in every patching benchmark.
 
 ## Testing & Contributing
 

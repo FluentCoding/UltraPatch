@@ -1,8 +1,8 @@
-import { JSONPatchTypes } from "./util/jsonpatch";
-import type { UltraPatchTypes } from "./util/types";
-import { UltraPatchUtil } from "./util/util";
+import { JSONPatchTypes } from "./util/jsonpatch.ts";
+import type { UltraPatchTypes } from "./util/types.ts";
+import { UltraPatchUtil } from "./util/util.ts";
 
-export * from "./util/types";
+export * from "./util/types.ts";
 
 // reference https://jsonpatch.com/
 /**
@@ -17,35 +17,36 @@ export * from "./util/types";
  */
 export function diff(
   origin: UltraPatchTypes.Diffable,
-  destination: UltraPatchTypes.Diffable
+  destination: UltraPatchTypes.Diffable,
 ): JSONPatchTypes.Operation[] {
   if (origin === destination) return [];
 
   const operations: JSONPatchTypes.Operation[] = [];
-  const stack: {
+  /*const stack: {
     o: UltraPatchTypes.Diffable;
     d: UltraPatchTypes.Diffable;
     p: string;
-  }[] = new Array(UltraPatchUtil.STACK_SIZE);
-  stack[0] = { o: origin, d: destination, p: "" };
+  }[] = [];*/
+  const stack: any[] = [origin, destination, "" /* root path */];
   let path = "",
     originIsArr = false,
     destIsArr = false,
     originLength = 0,
     destLength = 0,
-    combinedLength = 0, // probably faster than Math.min(originLength, destLength)
-    stackIndex = 0;
+    combinedLength = 0; // probably faster than Math.min(originLength, destLength)
 
-  while (stackIndex >= 0) {
-    const { o: origin, d: destination, p: parentPath } = stack[stackIndex--]!;
+  while (stack.length) {
+    const parentPath: string = stack.pop();
+    const destination: UltraPatchTypes.Diffable = stack.pop();
+    const origin: UltraPatchTypes.Diffable = stack.pop();
     if (origin === destination) continue;
 
-    (originIsArr = Array.isArray(origin)),
-      (destIsArr = Array.isArray(destination));
+    ((originIsArr = Array.isArray(origin)),
+      (destIsArr = Array.isArray(destination)));
     if (originIsArr && destIsArr) {
-      (originLength = (origin as []).length),
+      ((originLength = (origin as []).length),
         (destLength = (destination as []).length),
-        (combinedLength = originLength);
+        (combinedLength = originLength));
       if (destLength === originLength) {
       } else if (destLength > originLength) {
         for (let i = destLength; i-- !== originLength; ) {
@@ -74,12 +75,7 @@ export function diff(
             typeof originValue === "object" &&
             typeof destinationValue === "object"
           ) {
-            if (++stackIndex === stack.length) stack.length *= 2;
-            stack[stackIndex] = {
-              o: originValue,
-              d: destinationValue,
-              p: path,
-            };
+            stack.push(originValue, destinationValue, path);
           } else {
             operations.push({
               op: "replace",
@@ -106,12 +102,7 @@ export function diff(
               typeof originValue === "object" &&
               typeof destinationValue === "object"
             ) {
-              if (++stackIndex === stack.length) stack.length *= 2;
-              stack[stackIndex] = {
-                o: originValue,
-                d: destinationValue,
-                p: path,
-              };
+              stack.push(originValue, destinationValue, path);
             } else {
               operations.push({
                 op: "replace",
@@ -162,7 +153,7 @@ export function diff(
  */
 export function patch(
   target: UltraPatchTypes.Diffable,
-  operations: JSONPatchTypes.Operation[]
+  operations: JSONPatchTypes.Operation[],
 ): UltraPatchTypes.Diffable {
   let result: UltraPatchTypes.Diffable = target;
   for (const operation of operations) {
@@ -179,7 +170,7 @@ export function patch(
         case "copy":
           result = UltraPatchUtil.accessPath(
             result as UltraPatchTypes.DiffableCollection,
-            operation.from
+            operation.from,
           );
           break;
         case "test":
@@ -187,7 +178,7 @@ export function patch(
             throw new JSONPatchTypes.JSONPatchTestError(
               "",
               operation.value,
-              result
+              result,
             );
           break;
       }
@@ -196,7 +187,7 @@ export function patch(
         case "add": {
           let parent = result as UltraPatchTypes.DiffableCollection;
           const pathSegments = UltraPatchUtil.unescapedPathSegments(
-            operation.path
+            operation.path,
           );
           const last = pathSegments.length - 1;
 
@@ -223,7 +214,7 @@ export function patch(
         case "replace": {
           let parent = result as UltraPatchTypes.DiffableCollection;
           const pathSegments = UltraPatchUtil.unescapedPathSegments(
-            operation.path
+            operation.path,
           );
           const last = pathSegments.length - 1;
 
@@ -241,7 +232,7 @@ export function patch(
         case "remove": {
           let parent = result as UltraPatchTypes.DiffableCollection;
           const pathSegments = UltraPatchUtil.unescapedPathSegments(
-            operation.path
+            operation.path,
           );
           const last = pathSegments.length - 1;
 
@@ -266,7 +257,7 @@ export function patch(
           {
             let parent = result as UltraPatchTypes.DiffableCollection;
             const pathSegments = UltraPatchUtil.unescapedPathSegments(
-              operation.from
+              operation.from,
             );
             const last = pathSegments.length - 1;
 
@@ -288,7 +279,7 @@ export function patch(
           {
             let parent = result as UltraPatchTypes.DiffableCollection;
             const pathSegments = UltraPatchUtil.unescapedPathSegments(
-              operation.path
+              operation.path,
             );
             const last = pathSegments.length - 1;
 
@@ -311,7 +302,7 @@ export function patch(
           {
             let parent = result as UltraPatchTypes.DiffableCollection;
             const pathSegments = UltraPatchUtil.unescapedPathSegments(
-              operation.from
+              operation.from,
             );
             const last = pathSegments.length - 1;
 
@@ -328,7 +319,7 @@ export function patch(
           {
             let parent = result as UltraPatchTypes.DiffableCollection;
             const pathSegments = UltraPatchUtil.unescapedPathSegments(
-              operation.path
+              operation.path,
             );
             const last = pathSegments.length - 1;
 
@@ -350,13 +341,13 @@ export function patch(
         case "test":
           const actualValue = UltraPatchUtil.accessPath(
             result as UltraPatchTypes.DiffableCollection,
-            operation.path
+            operation.path,
           );
           if (!UltraPatchUtil.isEqual(actualValue, operation.value))
             throw new JSONPatchTypes.JSONPatchTestError(
               operation.path,
               operation.value,
-              actualValue
+              actualValue,
             );
           break;
       }

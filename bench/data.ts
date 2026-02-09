@@ -1,6 +1,6 @@
 import type { UltraPatchTypes } from "../src";
 import type { JSONPatchTypes } from "../src/util/jsonpatch";
-import * as UltraPatch from "../dist";
+import * as UltraPatch from "../dist/index.js";
 
 function repeatObject<T>(amount: number, obj: T): T[] {
   const arr = [];

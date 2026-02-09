@@ -1,11 +1,10 @@
 import { run, bench, summary, boxplot } from "mitata";
 import { diff, type UltraPatchTypes } from "../dist/index.js";
 import microdiff from "microdiff";
-import jiff, { type JSONValue } from "jiff";
 import jsonpatch from "fast-json-patch";
 import * as jsondiffts from "json-diff-ts";
 import rfc6902 from "rfc6902";
-import { dataSets } from "./data.js";
+import { dataSets } from "./data.ts";
 
 for (const bundle of dataSets) {
   boxplot(() => {
@@ -16,19 +15,12 @@ for (const bundle of dataSets) {
       bench(`fast-json-patch: ${bundle.name}`, function* () {
         yield () => jsonpatch.compare(bundle.origin!, bundle.destination!);
       });
-      bench(`jiff: ${bundle.name}`, function* () {
-        yield () =>
-          jiff.diff(
-            bundle.origin as JSONValue,
-            bundle.destination as JSONValue
-          );
-      });
       bench(`microdiff: ${bundle.name}`, function* () {
         yield () =>
           microdiff(
             bundle.origin as UltraPatchTypes.DiffableCollection,
             bundle.destination as UltraPatchTypes.DiffableCollection,
-            { cyclesFix: false }
+            { cyclesFix: false },
           );
       });
       bench(`jsondiffts: ${bundle.name}`, function* () {
